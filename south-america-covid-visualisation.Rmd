@@ -1,0 +1,114 @@
+---
+title: "COVID-19 cases in South America"
+author: "Theo Richardson"
+date: "2026-08-20"
+output:
+  github_document:
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+
+#packages!
+
+library(ggimage)
+library(grid)
+library(png)
+library(ggplot2)
+library(magick)
+library(ggthemes)
+library(scales)
+
+```
+
+**COVID-19 Cases in South America**
+
+This project visualises COVID-19 cases per million across South American countries using global data from October 2021. 
+
+```{r Covid cases in South America, echo=FALSE}
+
+
+
+#read csv file
+
+Covid <- read.csv("Data/Covid.csv", header = TRUE, sep = ",")
+
+
+#filtering out non South American countries 
+
+South_America <- subset(Covid, Continent == "South America")
+
+#images fron Images folder 
+
+load_flag <- function(path) {
+  as.raster(image_read(path))
+}
+
+argentina_raster <- load_flag("Images/argentina.png")
+uruguay_raster <- load_flag("Images/uruguay.png")
+brazil_raster <- load_flag("Images/brazil.png")
+colombia_raster <- load_flag("Images/colombia.png")
+chile_raster <- load_flag("Images/chile.png")
+
+
+
+#bar chart with gradually increasing values, lots of code involved for all those images 
+
+ggplot(
+  data = South_America, aes(
+    x = reorder(Country,Total_Cases_Per_Million),
+    y =    Total_Cases_Per_Million, fill = Country, collur = )) +
+  
+
+  
+  geom_bar(stat = "identity", na.omit = FALSE, show.legend = FALSE, colour = "black") +
+  
+  geom_text(aes(label = scales::number(Total_Cases_Per_Million, accuracy  = 1)), vjust = -0.5, size = 3) + 
+  
+  labs(x = "", 
+       y = "Total Cases per Million People") +
+  
+  expand_limits(y = c(1, 125000)) +
+  
+  theme_economist() +
+  
+  theme(axis.title.y = element_text(margin = margin(r = 20)), 
+        
+        axis.text.x = element_text(angle = 90, face = "bold"),
+        
+        panel.grid.major = element_blank(), 
+
+        panel.grid.minor =  element_blank(), 
+
+        axis.line = element_line(size = 0.5), 
+
+        panel.border = element_rect(colour = "black", size = 0.5
+                                    )) +
+   scale_fill_manual(values = c(
+    "Argentina" = "darkblue", 
+    "Uruguay" = "lightblue", 
+    "Brazil" = "lightgreen", 
+    "Colombia" = "yellow", 
+    "Chile" = "#850101", 
+    "Suriname" = "darkgreen",
+    "Peru" = "white", 
+    "Paraguay" = "purple", 
+    "Guyana" = "orange", 
+    "Bolivia" = "pink", 
+    "Ecuador" = "red", 
+    "Venezuela" = "black"
+    )) +
+  
+  annotation_custom(rasterGrob(as.raster(argentina_raster)), xmin = 11.5, xmax = 12.45, ymin = 95473 , ymax = 115473) +
+  
+  annotation_custom(rasterGrob(as.raster(uruguay_raster)), xmin = 10.55, xmax = 11.45, ymin =  91936, ymax = 111936) +
+  
+  annotation_custom(rasterGrob(as.raster(brazil_raster)), xmin = 9.55, xmax = 10.45 , ymin = 80857, ymax = 100857) +
+  
+  annotation_custom(rasterGrob(as.raster(colombia_raster)), xmin = 8.55, xmax = 9.45, ymin = 77010, ymax = 97010) +
+  
+  annotation_custom(rasterGrob(as.raster(chile_raster)), xmin = 7.55, xmax = 8.45, ymin = 66578, ymax = 86578) 
+
+```
+
+

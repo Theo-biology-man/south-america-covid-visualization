@@ -8,6 +8,16 @@ Theo Richardson
 This project visualises COVID-19 cases per million across South American
 countries using global data from October 2021.
 
+## Skills used
+
+-R
+-R markdown
+-data cleaning 
+-data visualisation 
+-data interpretation
+-reproducible analysis 
+-ggplot2
+
 ![](south-america-covid-visualisation-code_files/figure-gfm/Covid%20cases%20in%20South%20America-1.png)<!-- -->
 
 ## Project Files
@@ -15,3 +25,5 @@ countries using global data from October 2021.
 -south-america-covid-visualisation.Rmd - R markdown source code
 -south-america-covid-visualisation.html - rendered analysis 
 -figure-gfm/covid-plot.png - generated visualisation
+- Data/ — project dataset
+- Images/ — images used in the visualisation
